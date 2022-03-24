@@ -10,7 +10,6 @@ class UrlController extends Controller
     {
         $url = $request->input('url')['name'] ?? null;
 
-
         return $url;
     }
 }
