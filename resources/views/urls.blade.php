@@ -12,13 +12,14 @@
                 <th>Последняя проверка</th>
                 <th>Код ответа</th>
             </tr>
-
+            @foreach($urls as $url)
             <tr>
-                <td></td>
-                <td><a href=""></a></td>
-                <td></td>
+                <td>{{ $url->getId() }}</td>
+                <td><a href="">{{ $url->getName() }}</a></td>
+                <td>{{ $url->getCreatedAt() }}</td>
                 <td></td>
             </tr>
+            @endforeach
             </tbody>
         </table>
     </div>

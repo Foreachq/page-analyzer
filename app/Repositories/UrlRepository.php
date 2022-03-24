@@ -3,25 +3,28 @@
 namespace App\Repositories;
 
 use App\Models\Url;
-use Illuminate\Database\Query\Builder;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class UrlRepository
 {
     public function findAll(): array
     {
-        $builders = DB::table('urls')->get()->toArray();
+        $urls = DB::table('urls')->get();
 
-        return array_map(function (Builder $builder) {
-            return $this->builderToUrl($builder);
-        }, $builders);
+        return $urls->map(function ($url) {
+            return $this->stdClassToUrl($url);
+        })->toArray();
     }
 
-    public function findByName(string $name): Url
+    public function findByName(string $name): ?Url
     {
-        $builder = DB::table('urls')->where('name', $name);
+        $url = DB::table('urls')
+            ->where('name', $name)
+            ->get()
+            ->first();
 
-        return $this->builderToUrl($builder);
+        return $url === null ? null : $this->stdClassToUrl($url);
     }
 
     public function save(Url $url): void
@@ -49,14 +52,16 @@ class UrlRepository
             ]);
     }
 
-    private function builderToUrl(Builder $builder): Url
+    private function stdClassToUrl($stdUrl): Url
     {
-        $id = $builder->value('id');
-        $name = $builder->value('name');
-        $created_at = $builder->value('created_at');
+        $id = $stdUrl->id;
+        $name = $stdUrl->name;
+
+        $created_at = $stdUrl->created_at;
+        $carbonTime = Carbon::parse($created_at);
 
         $url = new Url($name);
-        $url->setCreatedAt($created_at);
+        $url->setCreatedAt($carbonTime);
         $url->setId($id);
 
         return $url;
