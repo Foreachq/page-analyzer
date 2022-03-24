@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UrlRequest;
+use App\Models\Url;
+use App\Repositories\UrlRepository;
 
 class UrlController extends Controller
 {
     public function submit(UrlRequest $request)
     {
-        $url = $request->input('url')['name'] ?? null;
+        $urlRepo = new UrlRepository();
+        $urlName = $request->input('url')['name'];
 
-        return $url;
+        $url = new Url($urlName);
+        $urlRepo->save($url);
+
+        return redirect()->route('home');
     }
 }
