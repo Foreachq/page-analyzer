@@ -15,7 +15,7 @@
             @foreach($urls as $url)
             <tr>
                 <td>{{ $url->getId() }}</td>
-                <td><a href="">{{ $url->getName() }}</a></td>
+                <td><a href="{{ route('url', $url->getId()) }}">{{ $url->getName() }}</a></td>
                 <td>{{ $url->getCreatedAt() }}</td>
                 <td></td>
             </tr>

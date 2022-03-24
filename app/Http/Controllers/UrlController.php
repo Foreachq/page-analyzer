@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UrlRequest;
 use App\Models\Url;
 use App\Repositories\UrlRepository;
+use Illuminate\Support\Facades\Route;
 
 class UrlController extends Controller
 {
@@ -13,11 +14,14 @@ class UrlController extends Controller
         $urlRepo = new UrlRepository();
         $urlName = $request->input('url')['name'];
 
-        if ($urlRepo->findByName($urlName) !== null) {
+        $urlArr = parse_url(strtolower($urlName));
+        $normalizedUrl = sprintf('%s://%s', $urlArr['scheme'], $urlArr['host']);
+
+        if ($urlRepo->findByName($normalizedUrl) !== null) {
             return redirect()->route('home');
         }
 
-        $url = new Url($urlName);
+        $url = new Url($normalizedUrl);
         $urlRepo->save($url);
 
         return redirect()->route('home');
@@ -33,5 +37,22 @@ class UrlController extends Controller
         ];
 
         return view('urls', $params);
+    }
+
+    public function showUrl()
+    {
+        $urlRepo = new UrlRepository();
+        $id = Route::current()->parameter('id');
+
+        $url = $urlRepo->findById($id);
+        if ($url === null) {
+            return abort(404);
+        }
+
+        $params = [
+          'url' => $url
+        ];
+
+        return view('url', $params);
     }
 }

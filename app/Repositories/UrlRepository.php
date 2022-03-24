@@ -27,6 +27,16 @@ class UrlRepository
         return $url === null ? null : $this->stdClassToUrl($url);
     }
 
+    public function findById(int $id): ?Url
+    {
+        $url = DB::table('urls')
+            ->where('id', $id)
+            ->get()
+            ->first();
+
+        return $url === null ? null : $this->stdClassToUrl($url);
+    }
+
     public function save(Url $url): void
     {
         DB::table('urls')->insert([
