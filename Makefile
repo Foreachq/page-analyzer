@@ -8,7 +8,6 @@ setup:
 	touch database/database.sqlite
 	php artisan migrate
 	php artisan db:seed
-	npm ci
 
 test:
 	php artisan test
