@@ -17,14 +17,22 @@ class UrlController extends Controller
         $urlArr = parse_url(strtolower($urlName));
         $normalizedUrl = sprintf('%s://%s', $urlArr['scheme'], $urlArr['host']);
 
-        if ($urlRepo->findByName($normalizedUrl) !== null) {
-            return redirect()->route('home');
+        $result = $urlRepo->findByName($normalizedUrl);
+        if ($result !== null) {
+            flash('Страница уже существует')->info();
+
+            return redirect()->route('url', $result->getId());
         }
 
         $url = new Url($normalizedUrl);
         $urlRepo->save($url);
+        flash('Страница успешно добавлена')->info();
 
-        return redirect()->route('home');
+        $urlId = $urlRepo
+            ->findByName($url->getName())
+            ->getId();
+
+        return redirect()->route('url', $urlId);
     }
 
     public function showAllUrls()
