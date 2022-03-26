@@ -21,7 +21,7 @@ class UrlController extends Controller
         if ($result !== null) {
             flash('Страница уже существует')->info();
 
-            return redirect()->route('url', $result->getId());
+            return redirect()->route('urls.index', $result->getId());
         }
 
         $url = new Url($normalizedUrl);
@@ -32,7 +32,7 @@ class UrlController extends Controller
             ->findByName($url->getName())
             ->getId();
 
-        return redirect()->route('url', $urlId);
+        return redirect()->route('urls.index', $urlId);
     }
 
     public function showAllUrls()

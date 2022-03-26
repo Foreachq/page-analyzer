@@ -9,8 +9,8 @@ Route::get('/', function () {
 
 Route::get('/urls', [UrlController::class, 'showAllUrls'])->name('urls');
 
-Route::post('/urls', [UrlController::class, 'submit'])->name('submit-urls');
+Route::post('/urls', [UrlController::class, 'submit'])->name('urls.create');
 
 Route::get('/urls/{id}', [UrlController::class, 'showUrl'])
     ->where('id', '[0-9]+')
-    ->name('url');
+    ->name('urls.index');
