@@ -13,7 +13,7 @@ class Url
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->created_at = Carbon::now();
+        $this->created_at = Carbon::now('GMT+3');
     }
 
     /**
