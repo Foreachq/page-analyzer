@@ -29,3 +29,6 @@ jobs:
 
       - name: Check lint
         run: make lint
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: ls tests; make test

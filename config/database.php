@@ -45,6 +45,12 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        'testing' => [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -67,11 +73,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => $url["host"],
-            'port' => $url["port"],
-            'database' => ltrim($url["path"], "/"),
-            'username' => $url["user"],
-            'password' => $url["pass"],
+            'host' => $url['host'] ?? '127.0.0.1',
+            'port' => $url['port'] ?? 5432,
+            'database' => ltrim($url['path'] ?? 'forge', '/'),
+            'username' => $url['user'] ?? 'forge',
+            'password' => $url['pass'] ?? '',
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
