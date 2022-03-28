@@ -34,14 +34,16 @@
                 <th>description</th>
                 <th>Дата создания</th>
             </tr>
+            @foreach ($checks as $check)
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ $check->getId() }}</td>
+                <td>{{ $check->getStatusCode() }}</td>
+                <td>{{ $check->getH1() }}</td>
+                <td>{{ $check->getTitle() }}</td>
+                <td>{{ $check->getDescription() }}</td>
+                <td>{{ $check->getCreatedAt() }}</td>
             </tr>
+            @endforeach
             </tbody></table>
     </div>
 @endsection

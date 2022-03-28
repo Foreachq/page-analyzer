@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UrlRequest;
 use App\Models\Url;
+use App\Repositories\UrlCheckRepository;
 use App\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Route;
 
@@ -57,8 +58,12 @@ class UrlController extends Controller
             return abort(404);
         }
 
+        $checksRepo = new UrlCheckRepository();
+        $checks = $checksRepo->findByUrlId($id);
+
         $params = [
-          'url' => $url
+            'url' => $url,
+            'checks' => $checks
         ];
 
         return view('url', $params);

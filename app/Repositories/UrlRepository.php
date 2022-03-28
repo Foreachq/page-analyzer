@@ -66,7 +66,7 @@ class UrlRepository
     {
         $url = new Url($stdUrl->name);
 
-        $carbonCreatedAt = Carbon::parse($stdUrl->createdAt);
+        $carbonCreatedAt = Carbon::parse($stdUrl->created_at);
         $url->setCreatedAt($carbonCreatedAt);
 
         $url->setId($stdUrl->id);
