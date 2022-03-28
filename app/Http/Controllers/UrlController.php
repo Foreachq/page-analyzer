@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UrlRequest;
 use App\Models\Url;
+use App\Models\UrlCheck;
 use App\Repositories\UrlCheckRepository;
 use App\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Route;
@@ -47,12 +48,23 @@ class UrlController extends Controller
         foreach ($urls as $url) {
             $urlChecks = $checksRepo->findByUrlId($url->getId());
             if (count($urlChecks) === 0) {
-                $lastChecks[$url->getId()] = '';
+                $lastChecks[$url->getId()] = new class {
+                    public function getCreatedAt(): string
+                    {
+                        return '';
+                    }
+
+                    public function getStatusCode(): string
+                    {
+                        return '';
+                    }
+                };
+
                 continue;
             }
 
             $lastCheck = collect($urlChecks)->last();
-            $lastChecks[$url->getId()] = $lastCheck->getCreatedAt();
+            $lastChecks[$url->getId()] = $lastCheck;
         }
 
         $params = [

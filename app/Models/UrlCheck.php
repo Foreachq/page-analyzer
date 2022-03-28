@@ -8,7 +8,7 @@ class UrlCheck
 {
     private int $id;
     private int $urlId;
-    private int $statusCode;
+    private ?int $statusCode;
     private string $h1;
     private string $title;
     private string $description;
@@ -18,7 +18,7 @@ class UrlCheck
     {
         $this->urlId = $urlId;
         $this->createdAt = Carbon::now('GMT+3');
-        $this->statusCode = 0;
+        $this->statusCode = null;
         $this->h1 = '';
         $this->title = '';
         $this->description = '';
@@ -57,9 +57,9 @@ class UrlCheck
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getStatusCode(): int
+    public function getStatusCode(): ?int
     {
         return $this->statusCode;
     }

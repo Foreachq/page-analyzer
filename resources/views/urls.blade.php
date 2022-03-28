@@ -16,8 +16,8 @@
             <tr>
                 <td>{{ $url->getId() }}</td>
                 <td><a href="{{ route('urls.index', $url->getId()) }}">{{ $url->getName() }}</a></td>
-                <td>{{ $lastChecks[$url->getId()] }}</td>
-                <td></td>
+                <td>{{ $lastChecks[$url->getId()]->getCreatedAt() }}</td>
+                <td>{{ $lastChecks[$url->getId()]->getStatusCode()}}</td>
             </tr>
             @endforeach
             </tbody>

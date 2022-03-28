@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UrlCheck;
 use App\Repositories\UrlCheckRepository;
 use App\Repositories\UrlRepository;
+use App\Utils\SiteAvailabilityChecker;
 use Illuminate\Support\Facades\Route;
 
 class UrlCheckController extends Controller
@@ -12,18 +12,22 @@ class UrlCheckController extends Controller
     public function check()
     {
         $urlId = Route::current()->parameter('id');
-
         $urlRepo = new UrlRepository();
-        if ($urlRepo->findById($urlId) === null) {
+
+        $url = $urlRepo->findById($urlId);
+        if ($url === null) {
             return abort(404);
         }
 
         $checkRepo = new UrlCheckRepository();
 
-        $check = new UrlCheck($urlId);
-        flash('Страница успешно проверена')->info();
+        $check = SiteAvailabilityChecker::check($url);
+        if ($check === null) {
+            return redirect(route('urls.index', $urlId));
+        }
 
         $checkRepo->save($check);
+        flash('Страница успешно проверена')->info();
 
         return redirect(route('urls.index', $urlId));
     }

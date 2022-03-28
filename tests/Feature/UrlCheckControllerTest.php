@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Url;
 use App\Repositories\UrlRepository;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class UrlCheckControllerTest extends TestCase
@@ -27,14 +28,21 @@ class UrlCheckControllerTest extends TestCase
 
     public function testSubmitUrlCheck()
     {
+        Http::fake([
+            'laravel.com' => Http::response([], 404, []),
+            'google.com' => Http::response([], 200, [])
+        ]);
+
         $this->post(route('check', 1));
         $this->assertDatabaseHas('url_checks', [
-            'url_id' => '1'
+            'url_id' => '1',
+            'status_code' => '404'
         ]);
 
         $this->post(route('check', 2));
         $this->assertDatabaseHas('url_checks', [
-            'url_id' => '2'
+            'url_id' => '2',
+            'status_code' => '200'
         ]);
     }
 
