@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\UrlCheckRepository;
 use App\Repositories\UrlRepository;
-use App\Utils\SiteAvailabilityChecker;
+use App\Utils\SiteSEOChecker;
 use Illuminate\Support\Facades\Route;
 
 class UrlCheckController extends Controller
@@ -21,7 +21,7 @@ class UrlCheckController extends Controller
 
         $checkRepo = new UrlCheckRepository();
 
-        $check = SiteAvailabilityChecker::check($url);
+        $check = SiteSEOChecker::check($url);
         if ($check === null) {
             return redirect(route('urls.index', $urlId));
         }
