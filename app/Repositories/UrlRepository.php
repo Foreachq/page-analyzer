@@ -64,15 +64,12 @@ class UrlRepository
 
     private function stdClassToUrl($stdUrl): Url
     {
-        $id = $stdUrl->id;
-        $name = $stdUrl->name;
+        $url = new Url($stdUrl->name);
 
-        $created_at = $stdUrl->created_at;
-        $carbonTime = Carbon::parse($created_at);
+        $carbonCreatedAt = Carbon::parse($stdUrl->createdAt);
+        $url->setCreatedAt($carbonCreatedAt);
 
-        $url = new Url($name);
-        $url->setCreatedAt($carbonTime);
-        $url->setId($id);
+        $url->setId($stdUrl->id);
 
         return $url;
     }

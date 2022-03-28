@@ -6,14 +6,14 @@ use Carbon\Carbon;
 
 class Url
 {
-    private $id;
-    private $name;
-    private $created_at;
+    private int $id;
+    private string $name;
+    private Carbon $createdAt;
 
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->created_at = Carbon::now('GMT+3');
+        $this->createdAt = Carbon::now('GMT+3');
     }
 
     /**
@@ -53,14 +53,14 @@ class Url
      */
     public function getCreatedAt(): Carbon
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
-     * @param Carbon $created_at
+     * @param Carbon $createdAt
      */
-    public function setCreatedAt(Carbon $created_at): void
+    public function setCreatedAt(Carbon $createdAt): void
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
     }
 }
