@@ -41,8 +41,23 @@ class UrlController extends Controller
         $urlRepo = new UrlRepository();
         $urls = $urlRepo->findAll();
 
+        $checksRepo = new UrlCheckRepository();
+
+        $lastChecks = [];
+        foreach ($urls as $url) {
+            $urlChecks = $checksRepo->findByUrlId($url->getId());
+            if (count($urlChecks) === 0) {
+                $lastChecks[$url->getId()] = '';
+                continue;
+            }
+
+            $lastCheck = collect($urlChecks)->last();
+            $lastChecks[$url->getId()] = $lastCheck->getCreatedAt();
+        }
+
         $params = [
-            'urls' => $urls
+            'urls' => $urls,
+            'lastChecks' => $lastChecks
         ];
 
         return view('urls', $params);
@@ -59,7 +74,7 @@ class UrlController extends Controller
         }
 
         $checksRepo = new UrlCheckRepository();
-        $checks = $checksRepo->findByUrlId($id);
+        $checks = array_reverse($checksRepo->findByUrlId($id));
 
         $params = [
             'url' => $url,
