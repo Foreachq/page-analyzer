@@ -10,7 +10,7 @@ setup:
 	php artisan db:seed
 
 test:
-	php artisan test
+	php artisan test --coverage-clover build/logs/clover.xml
 
 validate:
 	composer validate
