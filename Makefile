@@ -1,4 +1,4 @@
-start:
+up:
 	./vendor/bin/sail up -d
 
 down:
