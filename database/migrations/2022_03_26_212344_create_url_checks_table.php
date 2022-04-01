@@ -15,12 +15,16 @@ class CreateUrlChecksTable extends Migration
     {
         Schema::create('url_checks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('url_id')->references('id')->on('urls')->onDelete('cascade');
-            $table->smallInteger('status_code');
-            $table->string('h1');
-            $table->string('title');
-            $table->string('description');
-            $table->dateTime('created_at');
+            $table->foreignId('url_id')
+                ->nullable(false)
+                ->references('id')
+                ->on('urls')
+                ->onDelete('cascade');
+            $table->smallInteger('status_code')->nullable(true);
+            $table->string('h1')->nullable(true);
+            $table->string('title')->nullable(true);
+            $table->string('description')->nullable(true);
+            $table->dateTime('created_at')->nullable(false);
         });
     }
 
