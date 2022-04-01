@@ -86,13 +86,47 @@ class UrlController extends Controller
         }
 
         $checksRepo = new UrlCheckRepository();
+
         $checks = array_reverse($checksRepo->findByUrlId($id));
+        $normalizedChecks = $this->normalizeUrlChecks($checks);
 
         $params = [
             'url' => $url,
-            'checks' => $checks
+            'checks' => $normalizedChecks
         ];
 
         return view('url', $params);
+    }
+
+    private function normalizeUrlChecks(array $checks): array
+    {
+        $normalizedChecks = [];
+        foreach ($checks as $check) {
+            $h1 = $check->getH1();
+            $title = $check->getTitle();
+            $description = $check->getDescription();
+
+            $check->setH1(
+                mb_strlen($h1) > 10
+                    ? mb_substr($h1, 0, 10) . '...'
+                    : $h1
+            );
+
+            $check->setTitle(
+                mb_strlen($title) > 30
+                    ? mb_substr($title, 0, 30) . '...'
+                    : $title
+            );
+
+            $check->setDescription(
+                mb_strlen($description) > 30
+                    ? mb_substr($description, 0, 30) . '...'
+                    : $description
+            );
+
+            $normalizedChecks[] = $check;
+        }
+
+        return $normalizedChecks;
     }
 }

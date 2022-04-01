@@ -37,37 +37,26 @@ class SiteSEOChecker
     {
         $document = new Document($response->body() ?? '');
 
-        try {
-            $h1 = optional($document->first('h1'))->text();
-        } catch (InvalidSelectorException $e) {
-        }
-
-        try {
-            $title = optional($document->first('title'))->text();
-        } catch (InvalidSelectorException $e) {
-        }
-
-        try {
-            $description = optional($document->first('meta[name="description"]'))->attr('content');
-        } catch (InvalidSelectorException $e) {
-        }
-
         $data = [];
 
-        $h1 ??= '';
-        $data['h1'] = mb_strlen($h1) > 10
-            ? mb_substr($h1, 0, 10) . '...'
-            : $h1;
+        try {
+            $data['h1'] = optional($document->first('h1'))->text();
+        } catch (InvalidSelectorException $e) {
+        }
 
-        $title ??= '';
-        $data['title'] = mb_strlen($title) > 30
-            ? mb_substr($title, 0, 30) . '...'
-            : $title;
+        try {
+            $data['title'] = optional($document->first('title'))->text();
+        } catch (InvalidSelectorException $e) {
+        }
 
-        $description ??= '';
-        $data['description'] = mb_strlen($description) > 30
-            ? mb_substr($description, 0, 30) . '...'
-            : $description;
+        try {
+            $data['description'] = optional($document->first('meta[name="description"]'))->attr('content');
+        } catch (InvalidSelectorException $e) {
+        }
+
+        $data['h1'] ??= '';
+        $data['title'] ??= '';
+        $data['description'] ??= '';
 
         return $data;
     }
