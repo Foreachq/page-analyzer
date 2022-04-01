@@ -12,6 +12,13 @@ setup:
 	./vendor/bin/sail artisan migrate
 	./vendor/bin/sail artisan db:seed
 	./vendor/bin/sail down
+	npm ci
+
+watch:
+	npm run watch
+
+migrate:
+	php artisan migrate
 
 test:
 	./vendor/bin/sail artisan test --coverage-clover build/logs/clover.xml
