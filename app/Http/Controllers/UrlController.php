@@ -81,7 +81,17 @@ class UrlController extends Controller
     public function showUrl()
     {
         $urlRepo = new UrlRepository();
-        $id = Route::current()->parameter('id');
+
+        $route = Route::current();
+        if (
+            $route === null
+            || $route->parameter('id') === null
+            || is_object($route->parameter('id'))
+        ) {
+            return abort(404);
+        }
+
+        $id = intval($route->parameter('id'));
 
         $url = $urlRepo->findById($id);
         if ($url === null) {
