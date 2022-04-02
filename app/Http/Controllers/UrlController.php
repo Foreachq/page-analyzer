@@ -49,6 +49,7 @@ class UrlController extends Controller
         $lastChecks = [];
         foreach ($urls as $url) {
             $urlChecks = $checksRepo->findByUrlId($url->getId());
+
             if (count($urlChecks) === 0) {
                 $lastChecks[$url->getId()] = new class {
                     public function getCreatedAt(): string
