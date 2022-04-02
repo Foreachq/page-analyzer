@@ -15,7 +15,7 @@ class UrlCheckRepository
 
         return $checks->map(function ($check) {
             return $this->stdClassToCheck($check);
-        })->toArray();
+        })->filter()->toArray();
     }
 
     public function findByUrlId(int $id): array
@@ -26,7 +26,7 @@ class UrlCheckRepository
 
         return $checks->map(function ($check) {
             return $this->stdClassToCheck($check);
-        })->toArray();
+        })->filter()->toArray();
     }
 
     public function findById(int $id): ?UrlCheck
@@ -72,8 +72,19 @@ class UrlCheckRepository
             ]);
     }
 
-    private function stdClassToCheck($stdCheck): UrlCheck
+    private function stdClassToCheck(object $stdCheck): ?UrlCheck
     {
+        if (
+            !isset($stdCheck->url_id)
+            || !isset($stdCheck->id)
+            || !isset($stdCheck->created_at)
+            || !isset($stdCheck->description)
+            || !isset($stdCheck->h1)
+            || !isset($stdCheck->status_code)
+            || !isset($stdCheck->title)
+        ) {
+            return null;
+        }
         $check = new UrlCheck($stdCheck->url_id);
 
         $check->setId($stdCheck->id);

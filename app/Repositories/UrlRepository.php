@@ -62,7 +62,7 @@ class UrlRepository
             ]);
     }
 
-    private function stdClassToUrl($stdUrl): Url
+    private function stdClassToUrl(object $stdUrl): Url
     {
         $url = new Url($stdUrl->name);
 

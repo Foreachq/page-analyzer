@@ -28,13 +28,16 @@ class UrlController extends Controller
 
         $url = new Url($normalizedUrl);
         $urlRepo->save($url);
-        flash('Страница успешно добавлена')->info();
 
-        $urlId = $urlRepo
-            ->findByName($url->getName())
-            ->getId();
+        $createdUrl = $urlRepo
+            ->findByName($url->getName());
 
-        return redirect()->route('urls.index', $urlId);
+        if ($createdUrl !== null) {
+            flash('Страница успешно добавлена')->info();
+            return redirect()->route('urls.index', $createdUrl->getId());
+        }
+
+        return abort(500, "Couldn't add url.");
     }
 
     public function showAllUrls()

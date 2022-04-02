@@ -35,7 +35,7 @@ class SiteSEOChecker
 
     private static function getBodySEOParams(Response $response): array
     {
-        $document = new Document($response->body() ?? '');
+        $document = new Document($response->body());
 
         $data = [];
 
