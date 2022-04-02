@@ -14,7 +14,7 @@ class UrlRepository
 
         return $urls->map(function ($url) {
             return $this->stdClassToUrl($url);
-        })->toArray();
+        })->filter()->toArray();
     }
 
     public function findByName(string $name): ?Url
@@ -62,8 +62,15 @@ class UrlRepository
             ]);
     }
 
-    private function stdClassToUrl(object $stdUrl): Url
+    private function stdClassToUrl(object $stdUrl): Url|null
     {
+        if (
+            !isset($stdUrl->name)
+            || !isset($stdUrl->created_at)
+            || !isset($stdUrl->id)
+        ) {
+            return null;
+        }
         $url = new Url($stdUrl->name);
 
         $carbonCreatedAt = Carbon::parse($stdUrl->created_at);
