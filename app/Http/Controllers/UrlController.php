@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UrlRequest;
 use App\Models\Url;
-use App\Models\UrlCheck;
 use App\Repositories\UrlCheckRepository;
 use App\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Route;
@@ -83,11 +82,7 @@ class UrlController extends Controller
         $urlRepo = new UrlRepository();
 
         $route = Route::current();
-        if (
-            $route === null
-            || $route->parameter('id') === null
-            || is_object($route->parameter('id'))
-        ) {
+        if ($route === null || $route->parameter('id') === null) {
             return abort(404);
         }
 
