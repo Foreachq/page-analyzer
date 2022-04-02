@@ -21,10 +21,10 @@ class CreateUrlChecksTable extends Migration
                 ->on('urls')
                 ->onDelete('cascade');
             $table->smallInteger('status_code')->nullable(true);
-            $table->string('h1')->nullable(true);
             $table->string('title')->nullable(true);
             $table->string('description')->nullable(true);
-            $table->dateTime('created_at')->nullable(false);
+            $table->string('h1')->nullable(true);
+            $table->date('created_at')->nullable(false);
         });
     }
 

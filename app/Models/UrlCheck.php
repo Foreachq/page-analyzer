@@ -17,7 +17,7 @@ class UrlCheck
     public function __construct(int $urlId)
     {
         $this->urlId = $urlId;
-        $this->createdAt = Carbon::now('GMT+3');
+        $this->createdAt = Carbon::now();
         $this->statusCode = null;
         $this->h1 = '';
         $this->title = '';

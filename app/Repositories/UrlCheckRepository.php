@@ -47,7 +47,7 @@ class UrlCheckRepository
             'h1' => $check->getH1(),
             'title' => $check->getTitle(),
             'description' => $check->getDescription(),
-            'created_at' => $check->getCreatedAt(),
+            'created_at' => $check->getCreatedAt()->toJSON(),
         ]);
     }
 
