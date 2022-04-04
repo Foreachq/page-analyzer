@@ -23,7 +23,8 @@ Project features:
 ## Requirements
 
 - Docker
-- composer 2.*
+- php ^8.0.2
+- composer ^2.3
 
 ## Installation
 
