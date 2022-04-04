@@ -6,6 +6,10 @@
 
 «Page Analyzer» — a site that analyzes if the specified pages correspond SEO suitability criteria.
 
+## Demo
+
+Project demo can be viewed [<ins>**here**</ins>](http://foreachq-page-analyzer.herokuapp.com/).
+
 ## Description
 
 Program is build in the form of a site where you can add url of the page and run SEO checks.
@@ -18,8 +22,8 @@ Project features:
 
 ## Requirements
 
+- Docker
 - composer 2.*
-- docker
 
 ## Installation
 
@@ -49,7 +53,3 @@ DB_PASSWORD=laravel
 ```
 make up
 ```
-
-## Demo
-
-Project demo can be viewed [**here**](https://foreachq-page-analyzer.herokuapp.com/)
