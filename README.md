@@ -18,7 +18,7 @@ Project features:
 - Page parsing for response code, page title, first `<h1>` tag and `<meta name="description" content="...">` content;
 - Postgresql DB storage for added urls and check results;
 - Smart testing (faking Http responses, usage of an in-memory sqlite DB);
-- Sail containerization for easy to run local instances.
+- Docker containerization for easy to run local instances.
 
 ## Requirements
 
@@ -28,11 +28,13 @@ Project features:
 
 - Download package
 
+Using git clone:
+
 ``` bash
 git clone https://github.com/Foreachq/page-analyzer
 ```
 
-__OR__
+Or using composer:
 
 ``` bash
 composer create-project foreachq/page-analyzer
