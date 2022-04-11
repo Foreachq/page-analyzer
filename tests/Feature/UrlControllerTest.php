@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Url;
-use App\Repositories\UrlRepository;
+use Database\Repositories\UrlRepository;
 use Tests\TestCase;
 
 class UrlControllerTest extends TestCase

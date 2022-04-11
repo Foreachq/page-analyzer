@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace Database\Repositories;
 
 use App\Models\Url;
 use App\Models\UrlCheck;
