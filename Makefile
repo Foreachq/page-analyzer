@@ -1,33 +1,33 @@
 up:
-	./vendor/bin/sail up -d
+	docker-compose up -d
 
 down:
-	./vendor/bin/sail down
+	docker-compose down
 
 setup:
-	composer install
-	./vendor/bin/sail up -d
 	cp -n .env.example .env|| true
-	./vendor/bin/sail artisan key:gen --ansi
-	./vendor/bin/sail artisan migrate
-	./vendor/bin/sail artisan db:seed
-	./vendor/bin/sail down
-	npm ci
+	docker-compose up -d
+	docker-compose run web php artisan migrate
+	docker-compose run web php artisan db:seed
+	docker-compose down
 
 watch:
-	npm run watch
+	docker-compose run web npm run watch
 
 migrate:
-	./vendor/bin/sail artisan migrate
+	docker-compose run web php artisan migrate
 
 test:
-	./vendor/bin/sail artisan test --coverage-clover build/logs/clover.xml
+	docker-compose run web php artisan test --coverage-clover build/logs/clover.xml
 
 validate:
-	./vendor/bin/sail composer validate
+	docker-compose run web composer validate
+
+update:
+	docker-compose run web composer update
 
 deploy:
 	git push heroku
 
 lint:
-	./vendor/bin/sail composer exec --verbose phpcs -- --standard=PSR12 routes/web.php app/Http/Controllers app/Http/Requests app/Models app/Repositories app/Utils tests/Unit tests/Feature
+	docker-compose run web composer exec --verbose phpcs -- --standard=PSR12 routes/web.php app/Http/Controllers app/Http/Requests app/Models app/Repositories app/Utils tests/Unit tests/Feature

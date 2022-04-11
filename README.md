@@ -23,34 +23,36 @@ Project features:
 ## Requirements
 
 - Docker
-- php ^8.0.2
-- composer ^2.3
 
 ## Installation
 
 - Download package
 
-```bash
+``` bash
+git clone https://github.com/Foreachq/page-analyzer
+```
+
+__OR__
+
+``` bash
 composer create-project foreachq/page-analyzer
 ```
 
 - Setup project
 
-```
+``` bash
 make setup
 ```
 
-- Edit .env properties
-
-```
-DB_HOST=pgsql
-DB_PORT=5432
-DB_DATABASE=page_analyzer
-DB_USERNAME=laravel
-DB_PASSWORD=laravel
-```
-
 - Run local instance
+
+``` bash
+make up   # starting on localhost:80
 ```
-make up
+
+- Stop local instance
+
+``` bash
+make down
 ```
+

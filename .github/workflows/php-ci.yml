@@ -10,20 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
 
-    strategy:
-      matrix:
-        php-versions: ['8.1']
-
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set up PHP ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-
-      - name: PHP Security Checker
-        uses: StephaneBour/actions-php-security-checker@1.1
 
       - name: Setup project
         run: make setup
