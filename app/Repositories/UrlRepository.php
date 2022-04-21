@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Repositories;
+namespace App\Repositories;
 
 use App\Models\Url;
 use Carbon\Carbon;
@@ -15,6 +15,17 @@ class UrlRepository
         return $urls->map(function ($url) {
             return $this->stdClassToUrl($url);
         })->filter()->toArray();
+    }
+    // TODO: STDClass to associative array
+
+    public function findAllUrlInfo(): array
+    {
+        $urls = DB::table('urls')
+            ->leftJoin('url_checks', 'urls.id', '=', 'url_checks.url_id')
+            ->select('urls.id', 'urls.name', 'url_checks.created_at', 'url_checks.status_code')
+            ->get();
+
+        return $urls->toArray();
     }
 
     public function findByName(string $name): ?Url
@@ -71,6 +82,7 @@ class UrlRepository
         ) {
             return null;
         }
+
         $url = new Url($stdUrl->name);
 
         $carbonCreatedAt = Carbon::parse($stdUrl->created_at);
