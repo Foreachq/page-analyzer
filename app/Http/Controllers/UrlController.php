@@ -4,21 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UrlRequest;
 use App\Models\Url;
-use Database\Repositories\UrlCheckRepository;
-use Database\Repositories\UrlRepository;
+use App\Repositories\UrlCheckRepository;
+use App\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Route;
 
 class UrlController extends Controller
 {
+    protected UrlRepository $urlRepository;
+
+    public function __construct(UrlRepository $urlRepository)
+    {
+        $this->urlRepository = $urlRepository;
+    }
+
     public function submit(UrlRequest $request)
     {
-        $urlRepo = new UrlRepository();
         $urlName = $request->input('url')['name'];
-
         $urlArr = parse_url(strtolower($urlName));
         $normalizedUrl = sprintf('%s://%s', $urlArr['scheme'], $urlArr['host']);
 
-        $result = $urlRepo->findByName($normalizedUrl);
+        $result = $this->urlRepository->findByName($normalizedUrl);
         if ($result !== null) {
             flash('Страница уже существует')->info();
 
@@ -26,13 +31,14 @@ class UrlController extends Controller
         }
 
         $url = new Url($normalizedUrl);
-        $urlRepo->save($url);
+        $this->urlRepository->save($url);
 
-        $createdUrl = $urlRepo
+        $createdUrl = $this->urlRepository
             ->findByName($url->getName());
 
         if ($createdUrl !== null) {
             flash('Страница успешно добавлена')->info();
+
             return redirect()->route('urls.index', $createdUrl->getId());
         }
 
@@ -41,47 +47,13 @@ class UrlController extends Controller
 
     public function showAllUrls()
     {
-        $urlRepo = new UrlRepository();
-        $urls = $urlRepo->findAll();
+        $urls = $this->urlRepository->findAllUrlInfo();
 
-        $checksRepo = new UrlCheckRepository();
-
-        $lastChecks = [];
-        foreach ($urls as $url) {
-            $urlChecks = $checksRepo->findByUrlId($url->getId());
-
-            if (count($urlChecks) === 0) {
-                $lastChecks[$url->getId()] = new class {
-                    public function getCreatedAt(): string
-                    {
-                        return '';
-                    }
-
-                    public function getStatusCode(): string
-                    {
-                        return '';
-                    }
-                };
-
-                continue;
-            }
-
-            $lastCheck = collect($urlChecks)->last();
-            $lastChecks[$url->getId()] = $lastCheck;
-        }
-
-        $params = [
-            'urls' => $urls,
-            'lastChecks' => $lastChecks
-        ];
-
-        return view('urls', $params);
+        return view('urls', ['urls' => $urls]);
     }
 
     public function showUrl()
     {
-        $urlRepo = new UrlRepository();
-
         $route = Route::current();
         if ($route === null || $route->parameter('id') === null) {
             return abort(404);
@@ -89,10 +61,11 @@ class UrlController extends Controller
 
         $id = intval($route->parameter('id'));
 
-        $url = $urlRepo->findById($id);
+        $url = $this->urlRepository->findById($id);
         if ($url === null) {
             return abort(404);
         }
+        // TODO: Implement join in repo
 
         $checksRepo = new UrlCheckRepository();
 
@@ -106,6 +79,8 @@ class UrlController extends Controller
 
         return view('url', $params);
     }
+
+    // TODO: Make one method for three fields
 
     private function normalizeUrlChecks(array $checks): array
     {
