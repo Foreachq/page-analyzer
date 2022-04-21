@@ -1,18 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Url;
-use Database\Repositories\UrlRepository;
+use App\Repositories\UrlRepository;
 use Tests\TestCase;
 
 class UrlControllerTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
