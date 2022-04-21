@@ -16,51 +16,39 @@ class Url
         $this->createdAt = Carbon::now('GMT+3');
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    /**
-     * @return Carbon
-     */
     public function getCreatedAt(): Carbon
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param Carbon $createdAt
-     */
-    public function setCreatedAt(Carbon $createdAt): void
+    public function setCreatedAt(Carbon $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 }

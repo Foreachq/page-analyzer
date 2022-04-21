@@ -24,115 +24,80 @@ class UrlCheck
         $this->description = '';
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getUrlId(): int
     {
         return $this->urlId;
     }
 
-    /**
-     * @param int $urlId
-     */
-    public function setUrlId(int $urlId): void
-    {
-        $this->urlId = $urlId;
-    }
-
-    /**
-     * @return int|null
-     */
     public function getStatusCode(): ?int
     {
         return $this->statusCode;
     }
 
-    /**
-     * @param int|null $statusCode
-     */
-    public function setStatusCode(?int $statusCode): void
+    public function setStatusCode(?int $statusCode): self
     {
         $this->statusCode = $statusCode;
+
+        return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getH1(): ?string
     {
         return $this->h1;
     }
 
-    /**
-     * @param string|null $h1
-     */
-    public function setH1(?string $h1): void
+    public function setH1(?string $h1): self
     {
         $this->h1 = $h1;
+
+        return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @param string|null $title
-     */
-    public function setTitle(?string $title): void
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
+
+        return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
     }
 
-    /**
-     * @return Carbon
-     */
     public function getCreatedAt(): Carbon
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param Carbon $createdAt
-     */
-    public function setCreatedAt(Carbon $createdAt): void
+    public function setCreatedAt(Carbon $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 }
