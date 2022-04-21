@@ -8,14 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class UrlRepository
 {
-    public function findAll(): array
-    {
-        $urls = DB::table('urls')->get();
-
-        return $urls->map(function ($url) {
-            return $this->stdClassToUrl($url);
-        })->filter()->toArray();
-    }
     // TODO: STDClass to associative array
 
     public function findAllUrlInfo(): array
@@ -54,23 +46,6 @@ class UrlRepository
             'name' => $url->getName(),
             'created_at' => $url->getCreatedAt()
         ]);
-    }
-
-    public function remove(Url $url): void
-    {
-        DB::table('urls')
-            ->where('name', $url->getName())
-            ->delete();
-    }
-
-    public function update(Url $oldUrl, Url $newUrl): void
-    {
-        DB::table('urls')
-            ->where('name', $oldUrl->getName())
-            ->update([
-                'name' => $newUrl->getName(),
-                'created_at' => $newUrl->getCreatedAt()
-            ]);
     }
 
     private function stdClassToUrl(object $stdUrl): Url|null
