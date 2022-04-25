@@ -5,6 +5,9 @@ services:
             context: .
         ports:
             - "80:8000"
+        volumes:
+            - '.:/app'
+            - '/app/vendor/'
         depends_on:
             - pgsql
     pgsql:
