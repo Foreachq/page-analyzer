@@ -38,9 +38,9 @@
             <tr>
                 <td>{{ $check->getId() }}</td>
                 <td>{{ $check->getStatusCode() }}</td>
-                <td>{{ $check->getH1() }}</td>
-                <td>{{ $check->getTitle() }}</td>
-                <td>{{ $check->getDescription() }}</td>
+                <td>{{ \Illuminate\Support\Str::limit($check->getH1(), 10) }}</td>
+                <td>{{ \Illuminate\Support\Str::limit($check->getTitle(), 30) }}</td>
+                <td>{{ \Illuminate\Support\Str::limit($check->getDescription(), 30) }}</td>
                 <td>{{ $check->getCreatedAt() }}</td>
             </tr>
             @endforeach
