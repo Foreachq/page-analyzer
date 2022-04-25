@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Utils;
+namespace App\Services;
 
 use App\Models\Url;
 use App\Models\UrlCheck;
+use DiDom\Document;
 use DiDom\Exceptions\InvalidSelectorException;
+use Exception;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Exception;
-use DiDom\Document;
 
+// TODO: 'Unstatic'
 class SiteSEOChecker
 {
     public static function check(Url $url): ?UrlCheck
@@ -23,6 +24,7 @@ class SiteSEOChecker
 
         $params = self::getBodySEOParams($response);
 
+        // TODO: UrlChecks factory
         $check = new UrlCheck($url->getId());
 
         $check->setStatusCode($response->status());
@@ -33,6 +35,7 @@ class SiteSEOChecker
         return $check;
     }
 
+    // TODO: make another parser service
     private static function getBodySEOParams(Response $response): array
     {
         $document = new Document($response->body());
