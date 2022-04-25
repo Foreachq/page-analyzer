@@ -16,7 +16,7 @@ RUN apt-get install -y nodejs
 
 WORKDIR /app
 
-COPY . .
+COPY . /app
 RUN composer install
 RUN php artisan key:gen --ansi
 RUN npm ci
