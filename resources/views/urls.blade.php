@@ -12,12 +12,12 @@
                 <th>Последняя проверка</th>
                 <th>Код ответа</th>
             </tr>
-            @foreach($urls as $url)
+            @foreach($urlsInfo as $urlInfo)
             <tr>
-                <td>{{ $url->getId() }}</td>
-                <td><a href="{{ route('urls.index', $url->getId()) }}">{{ $url->getName() }}</a></td>
-                <td>{{ $lastChecks[$url->getId()]->getCreatedAt() }}</td>
-                <td>{{ $lastChecks[$url->getId()]->getStatusCode()}}</td>
+                <td>{{ $urlInfo['id'] }}</td>
+                <td><a href="{{ route('urls.index', $urlInfo['id']) }}">{{ $urlInfo['name'] }}</a></td>
+                <td>{{ $urlInfo['check_date']}}</td>
+                <td>{{ $urlInfo['check_code']}}</td>
             </tr>
             @endforeach
             </tbody>

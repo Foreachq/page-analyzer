@@ -5,25 +5,51 @@ namespace App\Repositories;
 use App\Models\Url;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use JetBrains\PhpStorm\ArrayShape;
 
 class UrlRepository
 {
-    // TODO: STDClass to associative array
+    protected UrlCheckRepository $urlCheckRepo;
 
-    public function findAllUrlInfo(): array
+    public function __construct(UrlCheckRepository $urlRepository)
     {
-        $urls = DB::table('urls')
-            ->leftJoin('url_checks', 'urls.id', '=', 'url_checks.url_id')
-            ->select('urls.id', 'urls.name', 'url_checks.created_at', 'url_checks.status_code')
-            ->get();
+        $this->urlCheckRepo = $urlRepository;
+    }
 
-        return $urls->toArray();
+    public function findLastUrlsChecks(): array
+    {
+        return DB::table('urls')
+            ->leftJoin('url_checks', 'urls.id', '=', 'url_checks.url_id')
+            ->select(
+                'urls.id as id',
+                'urls.name as name',
+                'url_checks.created_at as check_date',
+                'url_checks.status_code as check_code'
+            )
+            ->distinct('urls.id')
+            ->get()
+            ->map(fn($entry) => $this->stdClassToArray($entry))
+            ->toArray();
+    }
+
+    #[ArrayShape(['url' => "App\\Models\\Url", 'checks' => "App\\Models\\UrlCheck"])]
+    public function findAllUrlChecks(int $id): array
+    {
+        $stdUrl = DB::table('urls')
+            ->where('urls.id', '=', $id)
+            ->get()
+            ->first();
+
+        $url = $this->stdClassToUrl($stdUrl);
+        $checks = $this->urlCheckRepo->findByUrlId($id);
+
+        return ['url' => $url, 'checks' => $checks];
     }
 
     public function findByName(string $name): ?Url
     {
         $url = DB::table('urls')
-            ->where('name', $name)
+            ->where('name', '=', $name)
             ->get()
             ->first();
 
@@ -33,7 +59,7 @@ class UrlRepository
     public function findById(int $id): ?Url
     {
         $url = DB::table('urls')
-            ->where('id', $id)
+            ->where('id', '=', $id)
             ->get()
             ->first();
 
@@ -48,16 +74,8 @@ class UrlRepository
         ]);
     }
 
-    private function stdClassToUrl(object $stdUrl): Url|null
+    private function stdClassToUrl(object $stdUrl): Url
     {
-        if (
-            !isset($stdUrl->name)
-            || !isset($stdUrl->created_at)
-            || !isset($stdUrl->id)
-        ) {
-            return null;
-        }
-
         $url = new Url($stdUrl->name);
 
         $carbonCreatedAt = Carbon::parse($stdUrl->created_at);
@@ -66,5 +84,10 @@ class UrlRepository
         $url->setId($stdUrl->id);
 
         return $url;
+    }
+
+    private function stdClassToArray(object $obj): array
+    {
+        return json_decode(json_encode($obj), true);
     }
 }

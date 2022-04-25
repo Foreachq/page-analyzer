@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UrlRequest;
 use App\Models\Url;
-use App\Repositories\UrlCheckRepository;
 use App\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Route;
 
@@ -47,9 +46,9 @@ class UrlController extends Controller
 
     public function showAllUrls()
     {
-        $urls = $this->urlRepository->findAllUrlInfo();
+        $urlsInfo = $this->urlRepository->findLastUrlsChecks();
 
-        return view('urls', ['urls' => $urls]);
+        return view('urls', ['urlsInfo' => $urlsInfo]);
     }
 
     public function showUrl()
@@ -61,56 +60,13 @@ class UrlController extends Controller
 
         $id = intval($route->parameter('id'));
 
-        $url = $this->urlRepository->findById($id);
-        if ($url === null) {
-            return abort(404);
-        }
-        // TODO: Implement join in repo
-
-        $checksRepo = new UrlCheckRepository();
-
-        $checks = array_reverse($checksRepo->findByUrlId($id));
-        $normalizedChecks = $this->normalizeUrlChecks($checks);
+        $urlInfo = $this->urlRepository->findAllUrlChecks($id);
 
         $params = [
-            'url' => $url,
-            'checks' => $normalizedChecks
+            'url' => $urlInfo['url'],
+            'checks' => $urlInfo['checks']
         ];
 
         return view('url', $params);
-    }
-
-    // TODO: Make one method for three fields
-
-    private function normalizeUrlChecks(array $checks): array
-    {
-        $normalizedChecks = [];
-        foreach ($checks as $check) {
-            $h1 = $check->getH1();
-            $title = $check->getTitle();
-            $description = $check->getDescription();
-
-            $check->setH1(
-                mb_strlen($h1) > 10
-                    ? mb_substr($h1, 0, 10) . '...'
-                    : $h1
-            );
-
-            $check->setTitle(
-                mb_strlen($title) > 30
-                    ? mb_substr($title, 0, 30) . '...'
-                    : $title
-            );
-
-            $check->setDescription(
-                mb_strlen($description) > 30
-                    ? mb_substr($description, 0, 30) . '...'
-                    : $description
-            );
-
-            $normalizedChecks[] = $check;
-        }
-
-        return $normalizedChecks;
     }
 }

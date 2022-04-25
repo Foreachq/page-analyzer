@@ -10,13 +10,11 @@ class UrlCheckRepository
 {
     public function findByUrlId(int $id): array
     {
-        $checks = DB::table('url_checks')
+        return DB::table('url_checks')
             ->where('url_id', $id)
-            ->get();
-
-        return $checks->map(function ($check) {
-            return $this->stdClassToCheck($check);
-        })->filter()->toArray();
+            ->get()
+            ->map(fn($entry) => $this->stdClassToCheck($entry))
+            ->toArray();
     }
 
     public function save(UrlCheck $check): void
@@ -33,17 +31,6 @@ class UrlCheckRepository
 
     private function stdClassToCheck(object $stdCheck): ?UrlCheck
     {
-        if (
-            !isset($stdCheck->url_id)
-            || !isset($stdCheck->id)
-            || !isset($stdCheck->created_at)
-            || !isset($stdCheck->description)
-            || !isset($stdCheck->h1)
-            || !isset($stdCheck->status_code)
-            || !isset($stdCheck->title)
-        ) {
-            return null;
-        }
         $check = new UrlCheck($stdCheck->url_id);
 
         $check->setId($stdCheck->id);

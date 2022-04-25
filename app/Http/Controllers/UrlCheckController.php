@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Utils\SiteSEOChecker;
 use App\Repositories\UrlCheckRepository;
 use App\Repositories\UrlRepository;
+use App\Services\SiteSEOChecker;
 use Illuminate\Support\Facades\Route;
 
 class UrlCheckController extends Controller
