@@ -1,3 +1,6 @@
+shell:
+	docker-compose run web bash
+
 up:
 	docker-compose up -d
 
@@ -8,6 +11,7 @@ setup:
 	cp -n .env.example .env|| true
 	docker-compose up -d
 	docker-compose run web php artisan migrate:refresh --seed --force
+	docker-compose run web php artisan key:gen --ansi
 	docker-compose down
 
 watch:
@@ -17,7 +21,12 @@ migrate:
 	docker-compose run web php artisan migrate
 
 test:
-	docker-compose run web php artisan test --coverage-clover build/logs/clover.xml
+	docker-compose run web php artisan test
+
+upload-test-coverage:
+	docker-compose run web php artisan test --coverage-clover build/logs/clover.xml;
+	docker-compose run web ../cc-reporter format-coverage ./build/logs/clover.xml -t clover --debug;
+	docker-compose run web ../cc-reporter upload-coverage
 
 validate:
 	docker-compose run web composer validate

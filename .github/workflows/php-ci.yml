@@ -23,14 +23,9 @@ jobs:
         run: make lint
 
       - name: Run test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.6.0
-        # Add Code Climate secret key
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          XDEBUG_MODE: coverage
-        with:
-          coverageCommand: make test-coverage
-          coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
-          debug: true
+        run:
+          docker-compose run -e XDEBUG_MODE=coverage web php artisan test --coverage-clover build/logs/clover.xml;
+          docker-compose run web ../cc-reporter format-coverage ./build/logs/clover.xml -t clover --debug;
+          docker-compose run -e CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }} web ../cc-reporter upload-coverage
       - name: Down container
         run: make down
