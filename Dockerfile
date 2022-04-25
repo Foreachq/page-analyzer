@@ -23,4 +23,4 @@ RUN npm ci
 
 EXPOSE 8000
 
-CMD ["bash", "-c", "php artisan migrate:refresh --seed --force && php artisan serve --host=0.0.0.0 --port=$PORT"]
+CMD ["bash", "-c", "php artisan serve --host=0.0.0.0 --port=$PORT"]
