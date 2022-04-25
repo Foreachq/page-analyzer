@@ -11,13 +11,13 @@ class UrlControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $repo = new UrlRepository();
+        $urlRepo = $this->app->make(UrlRepository::class);
 
         $url = new Url('https://laravel.com');
-        $repo->save($url);
+        $urlRepo->save($url);
 
         $url = new Url('https://google.com');
-        $repo->save($url);
+        $urlRepo->save($url);
     }
 
     public function testExistingIndex()

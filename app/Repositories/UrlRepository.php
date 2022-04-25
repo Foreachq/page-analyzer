@@ -33,12 +33,16 @@ class UrlRepository
     }
 
     #[ArrayShape(['url' => "App\\Models\\Url", 'checks' => "App\\Models\\UrlCheck"])]
-    public function findAllUrlChecks(int $id): array
+    public function findAllUrlChecks(int $id): ?array
     {
         $stdUrl = DB::table('urls')
             ->where('urls.id', '=', $id)
             ->get()
             ->first();
+
+        if ($stdUrl === null) {
+            return null;
+        }
 
         $url = $this->stdClassToUrl($stdUrl);
         $checks = $this->urlCheckRepo->findByUrlId($id);

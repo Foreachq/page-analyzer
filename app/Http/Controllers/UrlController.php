@@ -62,6 +62,10 @@ class UrlController extends Controller
 
         $urlInfo = $this->urlRepository->findAllUrlChecks($id);
 
+        if ($urlInfo === null) {
+            return abort(404);
+        }
+
         $params = [
             'url' => $urlInfo['url'],
             'checks' => $urlInfo['checks']
