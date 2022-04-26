@@ -3,7 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Url;
-use App\Repositories\UrlRepository;
+use Database\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 

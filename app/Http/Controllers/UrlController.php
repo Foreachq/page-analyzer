@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UrlRequest;
 use App\Models\Url;
-use App\Repositories\UrlRepository;
+use Database\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Route;
 
 class UrlController extends Controller

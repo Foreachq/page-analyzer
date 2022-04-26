@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace Database\Repositories;
 
 use App\Models\UrlCheck;
 use Carbon\Carbon;

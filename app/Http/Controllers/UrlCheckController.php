@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\UrlCheckRepository;
-use App\Repositories\UrlRepository;
 use App\Services\SiteChecker;
+use Database\Repositories\UrlCheckRepository;
+use Database\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Route;
 
 class UrlCheckController extends Controller
