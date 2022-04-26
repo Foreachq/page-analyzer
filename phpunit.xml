@@ -27,7 +27,7 @@
               processUncoveredFiles="true">
         <include>
             <directory suffix=".php">./app/Models</directory>
-            <directory suffix=".php">./app/Utils</directory>
+            <directory suffix=".php">./app/Services</directory>
             <file>./app/Http/Controllers/UrlCheckController.php</file>
             <file>./app/Http/Controllers/UrlController.php</file>
             <directory suffix=".php">./app/Repositories</directory>

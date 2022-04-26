@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\UrlCheckRepository;
 use App\Repositories\UrlRepository;
-use App\Services\SiteSEOChecker;
+use App\Services\SiteChecker;
 use Illuminate\Support\Facades\Route;
 
 class UrlCheckController extends Controller
@@ -30,7 +30,9 @@ class UrlCheckController extends Controller
             return abort(404);
         }
 
-        $check = SiteSEOChecker::check($url);
+        $checker = new SiteChecker();
+
+        $check = $checker->check($url);
         if ($check === null) {
             return redirect(route('urls.index', $urlId));
         }
