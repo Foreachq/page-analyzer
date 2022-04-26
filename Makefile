@@ -10,7 +10,7 @@ down:
 setup:
 	cp -n .env.example .env|| true
 	docker-compose up -d
-	docker-compose run web php artisan migrate:refresh --seed --force
+	docker-compose run web php artisan migrate:refresh --force
 	docker-compose run web php artisan key:gen --ansi
 	docker-compose down
 
@@ -38,4 +38,4 @@ deploy:
 	git push heroku
 
 lint:
-	docker-compose run web composer exec --verbose phpcs -- --standard=PSR12 routes/web.php app/Http/Controllers app/Http/Requests app/Models database/Repositories app/Services tests/Unit tests/Feature
+	docker-compose run web composer exec --verbose phpcs -- --standard=PSR12 routes/web.php app/Http/Controllers app/Http/Requests app/Models database/repositories app/Services tests/Unit tests/Feature
