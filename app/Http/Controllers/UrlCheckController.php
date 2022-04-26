@@ -2,20 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UrlNotExistsException;
+use App\Exceptions\UrlNotFoundException;
 use App\Services\SiteChecker;
-use Database\Repositories\UrlCheckRepository;
-use Database\Repositories\UrlRepository;
 use Illuminate\Support\Facades\Route;
 
 class UrlCheckController extends Controller
 {
-    protected UrlRepository $urlRepository;
-    protected UrlCheckRepository $urlCheckRepository;
-
-    public function __construct(UrlRepository $urlRepository, UrlCheckRepository $urlCheckRepository)
+    public function __construct(protected SiteChecker $checker)
     {
-        $this->urlRepository = $urlRepository;
-        $this->urlCheckRepository = $urlCheckRepository;
     }
 
     public function check()
@@ -25,20 +20,15 @@ class UrlCheckController extends Controller
             return abort(404);
         }
 
-        $url = $this->urlRepository->findById($urlId);
-        if ($url === null) {
+        try {
+            $this->checker->check($urlId);
+
+            flash('Страница успешно проверена')->info();
+        } catch (UrlNotFoundException) {
             return abort(404);
+        } catch (UrlNotExistsException $e) {
+            flash($e->getMessage())->error();
         }
-
-        $checker = new SiteChecker();
-
-        $check = $checker->check($url);
-        if ($check === null) {
-            return redirect(route('urls.index', $urlId));
-        }
-
-        $this->urlCheckRepository->save($check);
-        flash('Страница успешно проверена')->info();
 
         return redirect(route('urls.index', $urlId));
     }

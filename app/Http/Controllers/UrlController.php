@@ -9,11 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 class UrlController extends Controller
 {
-    protected UrlRepository $urlRepository;
-
-    public function __construct(UrlRepository $urlRepository)
+    public function __construct(protected UrlRepository $urlRepository)
     {
-        $this->urlRepository = $urlRepository;
     }
 
     public function submit(UrlRequest $request)

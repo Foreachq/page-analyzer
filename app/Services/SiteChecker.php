@@ -2,20 +2,37 @@
 
 namespace App\Services;
 
-use App\Models\Url;
+use App\Exceptions\UrlNotExistsException;
+use App\Exceptions\UrlNotFoundException;
 use App\Models\UrlCheck;
+use Database\Repositories\UrlCheckRepository;
+use Database\Repositories\UrlRepository;
 use Exception;
 use Illuminate\Support\Facades\Http;
 
 class SiteChecker
 {
-    public function check(Url $url): ?UrlCheck
+    public function __construct(
+        protected UrlRepository $urlRepository,
+        protected UrlCheckRepository $urlCheckRepository
+    ) {
+    }
+
+    /**
+     * @throws UrlNotExistsException
+     * @throws UrlNotFoundException
+     */
+    public function check(int $urlId): void
     {
+        $url = $this->urlRepository->findById($urlId);
+        if ($url === null) {
+            throw new UrlNotFoundException();
+        }
+
         try {
             $response = Http::get($url->getName());
         } catch (Exception $e) {
-            flash($e->getMessage())->error();
-            return null;
+            throw new UrlNotExistsException($e->getMessage());
         }
 
         $parser = new HtmlParser();
@@ -29,6 +46,6 @@ class SiteChecker
             ->setTitle($params['title'])
             ->setDescription($params['description']);
 
-        return $check;
+        $this->urlCheckRepository->save($check);
     }
 }
