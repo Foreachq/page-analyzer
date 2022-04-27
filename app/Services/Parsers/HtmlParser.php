@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Parsers;
 
 use DiDom\Document;
 use DiDom\Exceptions\InvalidSelectorException;

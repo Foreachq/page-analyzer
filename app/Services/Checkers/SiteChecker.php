@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Checkers;
 
-use App\Exceptions\UrlNotExistsException;
+use App\Exceptions\InvalidUrlException;
 use App\Exceptions\UrlNotFoundException;
-use App\Models\UrlCheck;
+use App\Services\Parsers\HtmlParser;
+use Database\Factories\UrlCheckFactory;
 use Database\Repositories\UrlCheckRepository;
 use Database\Repositories\UrlRepository;
 use Exception;
@@ -14,12 +15,13 @@ class SiteChecker
 {
     public function __construct(
         protected UrlRepository $urlRepository,
-        protected UrlCheckRepository $urlCheckRepository
+        protected UrlCheckRepository $urlCheckRepository,
+        protected UrlCheckFactory $urlCheckFactory
     ) {
     }
 
     /**
-     * @throws UrlNotExistsException
+     * @throws InvalidUrlException
      * @throws UrlNotFoundException
      */
     public function check(int $urlId): void
@@ -32,19 +34,19 @@ class SiteChecker
         try {
             $response = Http::get($url->getName());
         } catch (Exception $e) {
-            throw new UrlNotExistsException($e->getMessage());
+            throw new InvalidUrlException($e->getMessage());
         }
 
         $parser = new HtmlParser();
         $params = $parser->getBodySEOParams($response->body());
 
-        // TODO: UrlChecks factory
-        $check = new UrlCheck($url->getId());
-
-        $check->setStatusCode($response->status())
-            ->setH1($params['h1'])
-            ->setTitle($params['title'])
-            ->setDescription($params['description']);
+        $check = $this->urlCheckFactory->make(
+            $urlId,
+            $response->status(),
+            $params['h1'],
+            $params['title'],
+            $params['description']
+        );
 
         $this->urlCheckRepository->save($check);
     }

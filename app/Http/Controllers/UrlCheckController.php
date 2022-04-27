@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\UrlNotExistsException;
+use App\Exceptions\InvalidUrlException;
 use App\Exceptions\UrlNotFoundException;
-use App\Services\SiteChecker;
+use App\Services\Checkers\SiteChecker;
 use Illuminate\Support\Facades\Route;
 
 class UrlCheckController extends Controller
@@ -26,7 +26,7 @@ class UrlCheckController extends Controller
             flash('Страница успешно проверена')->info();
         } catch (UrlNotFoundException) {
             return abort(404);
-        } catch (UrlNotExistsException $e) {
+        } catch (InvalidUrlException $e) {
             flash($e->getMessage())->error();
         }
 

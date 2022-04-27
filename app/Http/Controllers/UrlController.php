@@ -2,48 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CannotAddUrlException;
+use App\Exceptions\UrlAlreadyExistsException;
+use App\Exceptions\UrlNotFoundException;
 use App\Http\Requests\UrlRequest;
-use App\Models\Url;
-use Database\Repositories\UrlRepository;
+use App\Services\Url\UrlFormatter;
+use App\Services\Url\UrlService;
 use Illuminate\Support\Facades\Route;
 
 class UrlController extends Controller
 {
-    public function __construct(protected UrlRepository $urlRepository)
-    {
+    public function __construct(
+        protected UrlFormatter $urlFormatter,
+        protected UrlService $urlService
+    ) {
     }
 
     public function submit(UrlRequest $request)
     {
-        $urlName = $request->input('url')['name'];
-        $urlArr = parse_url(strtolower($urlName));
-        $normalizedUrl = sprintf('%s://%s', $urlArr['scheme'], $urlArr['host']);
+        $rawUrl = $request->input('url')['name'];
+        $urlName = $this->urlFormatter->normalizeUrl($rawUrl);
 
-        $result = $this->urlRepository->findByName($normalizedUrl);
-        if ($result !== null) {
+        try {
+            $this->urlService->submitUrl($urlName);
+        } catch (UrlAlreadyExistsException) {
             flash('Страница уже существует')->info();
+            $existingUrl = $this->urlService->getUrlByName($urlName);
 
-            return redirect()->route('urls.index', $result->getId());
+            return redirect()->route('urls.index', $existingUrl->getId());
+        } catch (CannotAddUrlException) {
+            return abort(500, "Couldn't add url.");
         }
 
-        $url = new Url($normalizedUrl);
-        $this->urlRepository->save($url);
+        flash('Страница успешно добавлена')->info();
+        $createdUrl = $this->urlService->getUrlByName($urlName);
 
-        $createdUrl = $this->urlRepository
-            ->findByName($url->getName());
-
-        if ($createdUrl !== null) {
-            flash('Страница успешно добавлена')->info();
-
-            return redirect()->route('urls.index', $createdUrl->getId());
-        }
-
-        return abort(500, "Couldn't add url.");
+        return redirect()->route('urls.index', $createdUrl->getId());
     }
 
     public function showAllUrls()
     {
-        $urlsInfo = $this->urlRepository->findLastUrlsChecks();
+        $urlsInfo = $this->urlService->getAllLastUrlsChecks();
 
         return view('urls', ['urlsInfo' => $urlsInfo]);
     }
@@ -57,9 +56,9 @@ class UrlController extends Controller
 
         $id = intval($route->parameter('id'));
 
-        $urlInfo = $this->urlRepository->findAllUrlChecks($id);
-
-        if ($urlInfo === null) {
+        try {
+            $urlInfo = $this->urlService->getAllUrlChecks($id);
+        } catch (UrlNotFoundException) {
             return abort(404);
         }
 
