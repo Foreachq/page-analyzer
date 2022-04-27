@@ -9,11 +9,8 @@ use JetBrains\PhpStorm\ArrayShape;
 
 class UrlRepository
 {
-    protected UrlCheckRepository $urlCheckRepo;
-
-    public function __construct(UrlCheckRepository $urlRepository)
+    public function __construct(protected UrlCheckRepository $urlCheckRepo)
     {
-        $this->urlCheckRepo = $urlRepository;
     }
 
     public function findLastUrlsChecks(): array
