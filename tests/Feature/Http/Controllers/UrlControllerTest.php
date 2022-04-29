@@ -27,13 +27,23 @@ class UrlControllerTest extends TestCase
         $response->assertOk();
     }
 
-    public function testInvalidIndex()
+    public function invalidIndexProvider(): array
     {
-        $responseNumber = $this->get(route('urls.index', 999));
-        $responseNumber->assertNotFound();
+        return [
+            [999],
+            [1.2],
+            ['abc'],
+            [-1]
+        ];
+    }
 
-        $responseSymbol = $this->get(route('urls.index', 'abc'));
-        $responseSymbol->assertNotFound();
+    /**
+     * @dataProvider invalidIndexProvider
+     */
+    public function testInvalidIndex($index)
+    {
+        $responseNumber = $this->get(route('urls.index', $index));
+        $responseNumber->assertNotFound();
     }
 
     public function testShow()
@@ -43,22 +53,29 @@ class UrlControllerTest extends TestCase
         $response->assertOk();
     }
 
-    public function testShowPage()
+    public function validPageProvider(): array
+    {
+        return [
+            [['page' => 2]],
+            [['page' => 2.2]],
+            [['page' => -1]],
+            [['page' => 'asdf']]
+        ];
+    }
+
+    /**
+     * @dataProvider validPageProvider
+     */
+    public function testInvalidShowPage($page)
+    {
+        $response = $this->get(route('urls', $page));
+        $response->assertNotFound();
+    }
+
+    public function testValidShowPage()
     {
         $response = $this->get(route('urls', ['page' => 1]));
         $response->assertOk();
-
-        $response = $this->get(route('urls', ['page' => 2]));
-        $response->assertNotFound();
-
-        $response = $this->get(route('urls', ['page' => 2.2]));
-        $response->assertNotFound();
-
-        $response = $this->get(route('urls', ['page' => -1]));
-        $response->assertNotFound();
-
-        $response = $this->get(route('urls', ['page' => 'asdf']));
-        $response->assertNotFound();
     }
 
     public function testSubmitUrl()
