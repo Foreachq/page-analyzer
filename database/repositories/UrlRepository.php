@@ -13,7 +13,12 @@ class UrlRepository
     {
     }
 
-    public function findLastUrlsChecks(): array
+    public function getCount(): int
+    {
+        return DB::table('urls')->get()->count();
+    }
+
+    public function findLastUrlsChecks(int $from, int $count): array
     {
         return DB::table('urls')
             ->leftJoin('url_checks', 'urls.id', '=', 'url_checks.url_id')
@@ -24,6 +29,8 @@ class UrlRepository
                 'url_checks.status_code as check_code'
             )
             ->distinct('urls.id')
+            ->offset($from)
+            ->limit($count)
             ->get()
             ->map(fn($entry) => $this->stdClassToArray($entry))
             ->toArray();

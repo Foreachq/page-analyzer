@@ -43,6 +43,24 @@ class UrlControllerTest extends TestCase
         $response->assertOk();
     }
 
+    public function testShowPage()
+    {
+        $response = $this->get(route('urls', ['page' => 1]));
+        $response->assertOk();
+
+        $response = $this->get(route('urls', ['page' => 2]));
+        $response->assertNotFound();
+
+        $response = $this->get(route('urls', ['page' => 2.2]));
+        $response->assertNotFound();
+
+        $response = $this->get(route('urls', ['page' => -1]));
+        $response->assertNotFound();
+
+        $response = $this->get(route('urls', ['page' => 'asdf']));
+        $response->assertNotFound();
+    }
+
     public function testSubmitUrl()
     {
         $this->post(route('urls.create'), [

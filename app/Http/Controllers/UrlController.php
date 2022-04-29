@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CannotAddUrlException;
+use App\Exceptions\PageNotFoundException;
 use App\Exceptions\UrlAlreadyExistsException;
 use App\Exceptions\UrlNotFoundException;
 use App\Http\Requests\UrlRequest;
 use App\Services\Url\UrlFormatter;
 use App\Services\Url\UrlService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 class UrlController extends Controller
@@ -40,11 +42,21 @@ class UrlController extends Controller
         return redirect()->route('urls.index', $createdUrl->getId());
     }
 
-    public function showAllUrls()
+    public function showAllUrls(Request $request)
     {
-        $urlsInfo = $this->urlService->getAllLastUrlsChecks();
+        $page = $request->input('page', '1');
 
-        return view('urls', ['urlsInfo' => $urlsInfo]);
+        if (!ctype_digit($page)) {
+            return abort(404);
+        }
+
+        try {
+            $pageInfo = $this->urlService->getUrlsPage($page);
+        } catch (PageNotFoundException) {
+            return abort(404);
+        }
+
+        return view('urls', $pageInfo);
     }
 
     public function showUrl()
