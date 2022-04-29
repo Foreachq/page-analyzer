@@ -26,8 +26,8 @@ class UrlCheckController extends Controller
             flash('Страница успешно проверена')->info();
         } catch (UrlNotFoundException) {
             return abort(404);
-        } catch (InvalidUrlException $e) {
-            flash($e->getMessage())->error();
+        } catch (InvalidUrlException) {
+            flash('Не удалось найти страницу по указанному URL.')->error();
         }
 
         return redirect(route('urls.index', $urlId));
