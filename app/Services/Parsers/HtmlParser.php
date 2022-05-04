@@ -9,9 +9,17 @@ class HtmlParser
 {
     public function getBodySEOParams(string $body): array
     {
-        $document = new Document($body);
-
         $data = [];
+
+        $data['h1'] ??= '';
+        $data['title'] ??= '';
+        $data['description'] ??= '';
+
+        if (!strlen(trim($body))) {
+            return $data;
+        }
+
+        $document = new Document($body);
 
         try {
             $data['h1'] = optional($document->first('h1'))->text();
@@ -27,10 +35,6 @@ class HtmlParser
             $data['description'] = optional($document->first('meta[name="description"]'))->attr('content');
         } catch (InvalidSelectorException) {
         }
-
-        $data['h1'] ??= '';
-        $data['title'] ??= '';
-        $data['description'] ??= '';
 
         return $data;
     }
