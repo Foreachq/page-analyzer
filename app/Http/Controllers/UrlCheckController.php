@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidUrlException;
 use App\Exceptions\UrlNotFoundException;
 use App\Services\Checkers\SiteChecker;
-use Illuminate\Support\Facades\Route;
 
 class UrlCheckController extends Controller
 {
@@ -13,13 +12,8 @@ class UrlCheckController extends Controller
     {
     }
 
-    public function check()
+    public function check(int $urlId)
     {
-        $urlId = optional(Route::current())->parameter('id');
-        if ($urlId === null) {
-            return abort(404);
-        }
-
         try {
             $this->checker->check($urlId);
 

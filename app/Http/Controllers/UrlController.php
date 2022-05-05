@@ -10,7 +10,6 @@ use App\Http\Requests\UrlRequest;
 use App\Services\Url\UrlFormatter;
 use App\Services\Url\UrlService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 class UrlController extends Controller
 {
@@ -42,7 +41,7 @@ class UrlController extends Controller
         return redirect()->route('urls.index', $createdUrl->getId());
     }
 
-    public function showAllUrls(Request $request)
+    public function index(Request $request)
     {
         $page = $request->input('page', '1');
 
@@ -59,15 +58,8 @@ class UrlController extends Controller
         return view('urls', $pageInfo);
     }
 
-    public function showUrl()
+    public function show(int $id)
     {
-        $route = Route::current();
-        if ($route === null || $route->parameter('id') === null) {
-            return abort(404);
-        }
-
-        $id = intval($route->parameter('id'));
-
         try {
             $urlInfo = $this->urlService->getAllUrlChecks($id);
         } catch (UrlNotFoundException) {

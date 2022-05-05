@@ -8,11 +8,11 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/urls', [UrlController::class, 'showAllUrls'])->name('urls');
+Route::get('/urls', [UrlController::class, 'index'])->name('urls');
 
 Route::post('/urls', [UrlController::class, 'submit'])->name('urls.create');
 
-Route::get('/urls/{id}', [UrlController::class, 'showUrl'])
+Route::get('/urls/{id}', [UrlController::class, 'show'])
     ->where('id', '[0-9]+')
     ->name('urls.index');
 
