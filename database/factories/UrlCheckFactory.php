@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class UrlCheckFactory
 {
-    public function make(
+    public function create(
         int $urlId,
         ?int $statusCode,
         ?string $h1,

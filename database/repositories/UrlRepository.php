@@ -18,7 +18,7 @@ class UrlRepository
         return DB::table('urls')->get()->count();
     }
 
-    public function findLastUrlsChecks(int $from, int $count): array
+    public function findAllLastUrlsChecks(int $from, int $count): array
     {
         return DB::table('urls')
             ->leftJoin('url_checks', 'urls.id', '=', 'url_checks.url_id')
@@ -49,7 +49,7 @@ class UrlRepository
         }
 
         $url = $this->stdClassToUrl($stdUrl);
-        $checks = $this->urlCheckRepo->findByUrlId($id);
+        $checks = $this->urlCheckRepo->findAllByUrlId($id);
 
         return ['url' => $url, 'checks' => $checks];
     }

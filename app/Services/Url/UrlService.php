@@ -55,7 +55,7 @@ class UrlService
         }
 
         $startUrl = ($page - 1) * self::RESULTS_PER_PAGE;
-        $urls = $this->urlRepository->findLastUrlsChecks($startUrl, self::RESULTS_PER_PAGE);
+        $urls = $this->urlRepository->findAllLastUrlsChecks($startUrl, self::RESULTS_PER_PAGE);
         $endUrl = $startUrl + count($urls);
 
         return [

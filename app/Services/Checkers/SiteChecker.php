@@ -40,7 +40,7 @@ class SiteChecker
         $parser = new HtmlParser();
         $params = $parser->parseSEO($response->body());
 
-        $check = $this->urlCheckFactory->make(
+        $check = $this->urlCheckFactory->create(
             $urlId,
             $response->status(),
             $params['h1'],

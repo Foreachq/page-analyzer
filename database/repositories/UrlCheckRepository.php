@@ -13,7 +13,7 @@ class UrlCheckRepository
     {
     }
 
-    public function findByUrlId(int $id): array
+    public function findAllByUrlId(int $id): array
     {
         return DB::table('url_checks')
             ->where('url_id', $id)
@@ -36,7 +36,7 @@ class UrlCheckRepository
 
     private function stdClassToCheck(object $stdCheck): ?UrlCheck
     {
-        return $this->urlCheckFactory->make(
+        return $this->urlCheckFactory->create(
             $stdCheck->url_id,
             $stdCheck->status_code,
             $stdCheck->h1,
