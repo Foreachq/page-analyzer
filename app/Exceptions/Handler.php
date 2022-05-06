@@ -29,7 +29,7 @@ class Handler extends ExceptionHandler
 
     public function register(): void
     {
-        $this->reportable(function (UrlNotFoundException|PageNotFoundException $e) {
+        $this->reportable(function (PageNotFoundException $e) {
             return abort(404);
         });
 

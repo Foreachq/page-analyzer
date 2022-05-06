@@ -23,7 +23,6 @@ class SiteChecker
 
     /**
      * @throws InvalidUrlException
-     * @throws UrlNotFoundException
      */
     public function check(int $urlId): void
     {

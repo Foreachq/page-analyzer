@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\PageNotFoundException;
-use App\Exceptions\UrlNotFoundException;
 use App\Http\Requests\UrlRequest;
 use App\Services\Url\UrlFormatter;
 use App\Services\Url\UrlService;
@@ -55,9 +54,6 @@ class UrlController extends Controller
         return view('urls', $pageInfo);
     }
 
-    /**
-     * @throws UrlNotFoundException
-     */
     public function show(int $id): View
     {
         $urlInfo = $this->urlService->getAllUrlChecks($id);

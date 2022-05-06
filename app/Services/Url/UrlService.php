@@ -70,9 +70,6 @@ class UrlService
         return $this->urlRepository->findByName($urlName);
     }
 
-    /**
-     * @throws UrlNotFoundException
-     */
     #[ArrayShape(['url' => "\App\Models\Url", 'checks' => "\App\Models\UrlCheck"])]
     public function getAllUrlChecks($urlId): array
     {
