@@ -2,7 +2,6 @@
 
 namespace App\Services\Url;
 
-use App\Exceptions\CannotAddUrlException;
 use App\Exceptions\PageNotFoundException;
 use App\Exceptions\UrlAlreadyExistsException;
 use App\Exceptions\UrlNotFoundException;
@@ -22,7 +21,6 @@ class UrlService
 
     /**
      * @throws UrlAlreadyExistsException
-     * @throws CannotAddUrlException
      */
     public function submitUrl(string $url): void
     {
@@ -33,17 +31,20 @@ class UrlService
 
         $url = new Url($url);
         $this->urlRepository->save($url);
-
-        $createdUrl = $this->urlRepository->findByName($url->getName());
-
-        if ($createdUrl === null) {
-            throw new CannotAddUrlException();
-        }
     }
 
     /**
      * @throws PageNotFoundException
      */
+    #[ArrayShape(
+        [
+            'urlsInfo' => "array",
+            'urlsFrom' => "float|int",
+            'urlsTo' => "float|int|void",
+            'urlsCount' => "int",
+            'currentPage' => "int",
+            'pagesCount' => "float"
+        ])]
     public function getUrlsPage(int $page): array
     {
         $urlsCount = $this->urlRepository->getCount();
@@ -76,9 +77,9 @@ class UrlService
      * @throws UrlNotFoundException
      */
     #[ArrayShape(['url' => "\App\Models\Url", 'checks' => "\App\Models\UrlCheck"])]
-    public function getAllUrlChecks($id): array
+    public function getAllUrlChecks($urlId): array
     {
-        $info = $this->urlRepository->findAllUrlChecks($id);
+        $info = $this->urlRepository->findAllUrlChecks($urlId);
 
         if ($info === null) {
             throw new UrlNotFoundException();

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\CannotAddUrlException;
 use App\Exceptions\PageNotFoundException;
 use App\Exceptions\UrlAlreadyExistsException;
 use App\Exceptions\UrlNotFoundException;
@@ -31,8 +30,6 @@ class UrlController extends Controller
             $existingUrl = $this->urlService->getUrlByName($urlName);
 
             return redirect()->route('urls.index', $existingUrl->getId());
-        } catch (CannotAddUrlException) {
-            return abort(500, "Couldn't add url.");
         }
 
         flash('Страница успешно добавлена')->info();
