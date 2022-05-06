@@ -7,35 +7,45 @@ use DiDom\Exceptions\InvalidSelectorException;
 
 class HtmlParser
 {
-    public function getBodySEOParams(string $body): array
+    public function parseSEO(string $body): array
     {
-        $data = [];
-
-        $data['h1'] ??= '';
-        $data['title'] ??= '';
-        $data['description'] ??= '';
+        $params = [];
+        $params['h1'] = null;
+        $params['title'] = null;
+        $params['description'] = null;
 
         if (!strlen(trim($body))) {
-            return $data;
+            return $params;
         }
 
+        try {
+            $params = $this->getSEOParams($body);
+        } catch (InvalidSelectorException) {
+        }
+
+        return $params;
+    }
+
+    /**
+     * @throws InvalidSelectorException
+     */
+    public function getSEOParams(string $body): array
+    {
         $document = new Document($body);
+        $params = [];
 
-        try {
-            $data['h1'] = optional($document->first('h1'))->text();
-        } catch (InvalidSelectorException) {
-        }
+        $params['h1'] = $document->has('h1')
+            ? $document->first('h1')->text()
+            : null;
 
-        try {
-            $data['title'] = optional($document->first('title'))->text();
-        } catch (InvalidSelectorException) {
-        }
+        $params['title'] = $document->has('title')
+            ? $document->first('title')->text()
+            : null;
 
-        try {
-            $data['description'] = optional($document->first('meta[name="description"]'))->attr('content');
-        } catch (InvalidSelectorException) {
-        }
+        $params['description'] = $document->has('meta[name="description"]')
+            ? $document->first('meta[name="description"]')->attr('content')
+            : null;
 
-        return $data;
+        return $params;
     }
 }

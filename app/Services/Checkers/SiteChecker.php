@@ -38,7 +38,7 @@ class SiteChecker
         }
 
         $parser = new HtmlParser();
-        $params = $parser->getBodySEOParams($response->body());
+        $params = $parser->parseSEO($response->body());
 
         $check = $this->urlCheckFactory->make(
             $urlId,
