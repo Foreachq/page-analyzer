@@ -3,7 +3,6 @@
 namespace Database\Repositories;
 
 use App\Models\UrlCheck;
-use Carbon\Carbon;
 use Database\Factories\UrlCheckFactory;
 use Illuminate\Support\Facades\DB;
 
@@ -11,15 +10,6 @@ class UrlCheckRepository
 {
     public function __construct(protected UrlCheckFactory $urlCheckFactory)
     {
-    }
-
-    public function findAllByUrlId(int $id): array
-    {
-        return DB::table('url_checks')
-            ->where('url_id', $id)
-            ->get()
-            ->map(fn($entry) => $this->stdClassToCheck($entry))
-            ->toArray();
     }
 
     public function save(UrlCheck $check): void
@@ -32,18 +22,5 @@ class UrlCheckRepository
             'description' => $check->getDescription(),
             'created_at' => $check->getCreatedAt(),
         ]);
-    }
-
-    private function stdClassToCheck(object $stdCheck): ?UrlCheck
-    {
-        return $this->urlCheckFactory->create(
-            $stdCheck->url_id,
-            $stdCheck->status_code,
-            $stdCheck->h1,
-            $stdCheck->title,
-            $stdCheck->description,
-            Carbon::parse($stdCheck->created_at),
-            $stdCheck->id
-        );
     }
 }

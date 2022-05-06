@@ -73,12 +73,12 @@ class UrlService
     #[ArrayShape(['url' => "\App\Models\Url", 'checks' => "\App\Models\UrlCheck"])]
     public function getAllUrlChecks($urlId): array
     {
-        $info = $this->urlRepository->findAllUrlChecks($urlId);
+        $urlInfo = $this->urlRepository->findAllUrlChecks($urlId);
 
-        if ($info === null) {
+        if ($urlInfo === null) {
             throw new UrlNotFoundException();
         }
 
-        return $info;
+        return $urlInfo;
     }
 }
