@@ -53,7 +53,7 @@ class UrlControllerTest extends TestCase
         $response->assertOk();
     }
 
-    public function validPageProvider(): array
+    public function invalidPageProvider(): array
     {
         return [
             [['page' => 2]],
@@ -64,7 +64,7 @@ class UrlControllerTest extends TestCase
     }
 
     /**
-     * @dataProvider validPageProvider
+     * @dataProvider invalidPageProvider
      */
     public function testInvalidShowPage($page)
     {

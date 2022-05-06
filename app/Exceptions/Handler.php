@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -22,20 +23,20 @@ class Handler extends ExceptionHandler
      * @var array<int, string>
      */
     protected $dontFlash = [
-        'current_password',
-        'password',
-        'password_confirmation',
+        //
     ];
 
-    /**
-     * Register the exception handling callbacks for the application.
-     *
-     * @return void
-     */
-    public function register()
+
+    public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(function (UrlNotFoundException|PageNotFoundException $e) {
+            return abort(404);
+        });
+
+        $this->renderable(function (InvalidUrlException $e, Request $request) {
+            flash('Не удалось найти страницу по указанному URL.')->error();
+
+            return redirect(redirect()->getUrlGenerator()->previous());
         });
     }
 }

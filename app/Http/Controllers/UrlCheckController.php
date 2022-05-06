@@ -13,17 +13,14 @@ class UrlCheckController extends Controller
     {
     }
 
+    /**
+     * @throws UrlNotFoundException
+     * @throws InvalidUrlException
+     */
     public function check(int $urlId): RedirectResponse
     {
-        try {
-            $this->checker->check($urlId);
-
-            flash('Страница успешно проверена')->info();
-        } catch (UrlNotFoundException) {
-            return abort(404);
-        } catch (InvalidUrlException) {
-            flash('Не удалось найти страницу по указанному URL.')->error();
-        }
+        $this->checker->check($urlId);
+        flash('Страница успешно проверена')->info();
 
         return redirect(route('urls.index', $urlId));
     }

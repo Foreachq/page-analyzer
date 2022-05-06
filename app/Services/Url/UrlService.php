@@ -3,7 +3,6 @@
 namespace App\Services\Url;
 
 use App\Exceptions\PageNotFoundException;
-use App\Exceptions\UrlAlreadyExistsException;
 use App\Exceptions\UrlNotFoundException;
 use App\Models\Url;
 use Database\Repositories\UrlRepository;
@@ -19,31 +18,30 @@ class UrlService
     ) {
     }
 
-    /**
-     * @throws UrlAlreadyExistsException
-     */
-    public function submitUrl(string $url): void
+    public function addUrl(string $url): bool
     {
         $queryResult = $this->urlRepository->findByName($url);
         if ($queryResult !== null) {
-            throw new UrlAlreadyExistsException();
+            return false;
         }
 
         $url = new Url($url);
         $this->urlRepository->save($url);
+
+        return true;
     }
 
     /**
      * @throws PageNotFoundException
      */
     #[ArrayShape([
-            'urlsInfo' => "array",
-            'urlsFrom' => "float|int",
-            'urlsTo' => "float|int|void",
-            'urlsCount' => "int",
-            'currentPage' => "int",
-            'pagesCount' => "float"
-        ])]
+        'urlsInfo' => "array",
+        'urlsFrom' => "float|int",
+        'urlsTo' => "float|int|void",
+        'urlsCount' => "int",
+        'currentPage' => "int",
+        'pagesCount' => "float"
+    ])]
     public function getUrlsPage(int $page): array
     {
         $urlsCount = $this->urlRepository->getCount();

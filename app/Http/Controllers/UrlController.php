@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\PageNotFoundException;
-use App\Exceptions\UrlAlreadyExistsException;
 use App\Exceptions\UrlNotFoundException;
 use App\Http\Requests\UrlRequest;
 use App\Services\Url\UrlFormatter;
@@ -25,9 +24,9 @@ class UrlController extends Controller
         $rawUrl = $request->input('url')['name'];
         $urlName = $this->urlFormatter->normalizeUrl($rawUrl);
 
-        try {
-            $this->urlService->submitUrl($urlName);
-        } catch (UrlAlreadyExistsException) {
+        $isAdded = $this->urlService->addUrl($urlName);
+
+        if (!$isAdded) {
             flash('Страница уже существует')->info();
             $existingUrl = $this->urlService->getUrlByName($urlName);
 
@@ -40,6 +39,9 @@ class UrlController extends Controller
         return redirect()->route('urls.index', $createdUrl->getId());
     }
 
+    /**
+     * @throws PageNotFoundException
+     */
     public function index(Request $request): View
     {
         $page = $request->input('page', '1');
@@ -48,22 +50,17 @@ class UrlController extends Controller
             return abort(404);
         }
 
-        try {
-            $pageInfo = $this->urlService->getUrlsPage($page);
-        } catch (PageNotFoundException) {
-            return abort(404);
-        }
+        $pageInfo = $this->urlService->getUrlsPage($page);
 
         return view('urls', $pageInfo);
     }
 
+    /**
+     * @throws UrlNotFoundException
+     */
     public function show(int $id): View
     {
-        try {
-            $urlInfo = $this->urlService->getAllUrlChecks($id);
-        } catch (UrlNotFoundException) {
-            return abort(404);
-        }
+        $urlInfo = $this->urlService->getAllUrlChecks($id);
 
         $params = [
             'url' => $urlInfo['url'],
