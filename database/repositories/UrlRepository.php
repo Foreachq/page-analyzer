@@ -36,7 +36,10 @@ class UrlRepository
             ->toArray();
     }
 
-    #[ArrayShape(['url' => "App\\Models\\Url", 'checks' => "App\\Models\\UrlCheck"])]
+    #[ArrayShape([
+        'url' => "App\\Models\\Url",
+        'checks' => "App\\Models\\UrlCheck"
+    ])]
     public function findAllUrlChecks(int $id): ?array
     {
         $stdUrl = DB::table('urls')

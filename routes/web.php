@@ -10,7 +10,7 @@ Route::get('/', function () {
 
 Route::get('/urls', [UrlController::class, 'index'])->name('urls');
 
-Route::post('/urls', [UrlController::class, 'submit'])->name('urls.create');
+Route::post('/urls', [UrlController::class, 'add'])->name('urls.create');
 
 Route::get('/urls/{id}', [UrlController::class, 'show'])
     ->where('id', '[0-9]+')

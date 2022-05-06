@@ -36,8 +36,7 @@ class UrlService
     /**
      * @throws PageNotFoundException
      */
-    #[ArrayShape(
-        [
+    #[ArrayShape([
             'urlsInfo' => "array",
             'urlsFrom' => "float|int",
             'urlsTo' => "float|int|void",

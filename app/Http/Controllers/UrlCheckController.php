@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidUrlException;
 use App\Exceptions\UrlNotFoundException;
 use App\Services\Checkers\SiteChecker;
+use Illuminate\Http\RedirectResponse;
 
 class UrlCheckController extends Controller
 {
@@ -12,7 +13,7 @@ class UrlCheckController extends Controller
     {
     }
 
-    public function check(int $urlId)
+    public function check(int $urlId): RedirectResponse
     {
         try {
             $this->checker->check($urlId);

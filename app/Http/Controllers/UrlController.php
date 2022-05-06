@@ -8,6 +8,8 @@ use App\Exceptions\UrlNotFoundException;
 use App\Http\Requests\UrlRequest;
 use App\Services\Url\UrlFormatter;
 use App\Services\Url\UrlService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class UrlController extends Controller
@@ -18,7 +20,7 @@ class UrlController extends Controller
     ) {
     }
 
-    public function submit(UrlRequest $request)
+    public function add(UrlRequest $request): RedirectResponse
     {
         $rawUrl = $request->input('url')['name'];
         $urlName = $this->urlFormatter->normalizeUrl($rawUrl);
@@ -38,7 +40,7 @@ class UrlController extends Controller
         return redirect()->route('urls.index', $createdUrl->getId());
     }
 
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $page = $request->input('page', '1');
 
@@ -55,7 +57,7 @@ class UrlController extends Controller
         return view('urls', $pageInfo);
     }
 
-    public function show(int $id)
+    public function show(int $id): View
     {
         try {
             $urlInfo = $this->urlService->getAllUrlChecks($id);

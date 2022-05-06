@@ -16,7 +16,8 @@ class SiteChecker
     public function __construct(
         protected UrlRepository $urlRepository,
         protected UrlCheckRepository $urlCheckRepository,
-        protected UrlCheckFactory $urlCheckFactory
+        protected UrlCheckFactory $urlCheckFactory,
+        protected HtmlParser $htmlParser
     ) {
     }
 
@@ -37,8 +38,7 @@ class SiteChecker
             throw new InvalidUrlException($e->getMessage());
         }
 
-        $parser = new HtmlParser();
-        $params = $parser->parseSEO($response->body());
+        $params = $this->htmlParser->parseSEO($response->body());
 
         $check = $this->urlCheckFactory->create(
             $urlId,

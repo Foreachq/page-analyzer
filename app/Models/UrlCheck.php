@@ -18,10 +18,6 @@ class UrlCheck
     {
         $this->urlId = $urlId;
         $this->createdAt = Carbon::now('GMT+3');
-        $this->statusCode = null;
-        $this->h1 = '';
-        $this->title = '';
-        $this->description = '';
     }
 
     public function getId(): int
