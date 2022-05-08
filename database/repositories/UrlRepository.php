@@ -37,10 +37,15 @@ class UrlRepository
     {
         $urlChecksInfo = DB::table('urls')
             ->select(
-                'urls.id as url_id', 'urls.name as url_name', 'urls.created_at as url_created_at',
-                'url_checks.id as check_id', 'url_checks.status_code as check_status_code',
-                'url_checks.title as check_title', 'url_checks.description as check_description',
-                'url_checks.h1 as check_h1', 'url_checks.created_at as check_created_at',
+                'urls.id AS url_id',
+                'urls.name AS url_name',
+                'urls.created_at AS url_created_at',
+                'url_checks.id AS check_id',
+                'url_checks.status_code AS check_status_code',
+                'url_checks.title AS check_title',
+                'url_checks.description AS check_description',
+                'url_checks.h1 AS check_h1',
+                'url_checks.created_at AS check_created_at'
             )
             ->leftJoin('url_checks', 'url_checks.url_id', '=', 'urls.id')
             ->where('urls.id', '=', $id)

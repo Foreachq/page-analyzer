@@ -3,15 +3,10 @@
 namespace Database\Repositories;
 
 use App\Models\UrlCheck;
-use Database\Factories\UrlCheckFactory;
 use Illuminate\Support\Facades\DB;
 
 class UrlCheckRepository
 {
-    public function __construct(protected UrlCheckFactory $urlCheckFactory)
-    {
-    }
-
     public function save(UrlCheck $check): void
     {
         DB::table('url_checks')->insert([
