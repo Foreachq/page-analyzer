@@ -8,7 +8,7 @@
 
 ## Demo
 
-Project demo can be viewed [<ins>**here**</ins>](http://foreachq-page-analyzer.herokuapp.com/).
+Project demo can be viewed [<ins>**here**</ins>](https://foreachq-page-analyzer.herokuapp.com/).
 
 ## Description
 
