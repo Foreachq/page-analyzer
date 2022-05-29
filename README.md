@@ -12,7 +12,7 @@ Project demo can be viewed [<ins>**here**</ins>](https://foreachq-page-analyzer.
 
 ## Description
 
-Program is build in the form of a site where you can add url of the page and run SEO checks.
+Application is build in the form of a site where you can add url of the page and run SEO checks.
 
 Project features:
 - Page parsing for response code, page title, first `<h1>` tag and `<meta name="description" content="...">` content;
@@ -22,7 +22,7 @@ Project features:
 
 ## Requirements
 
-- Docker
+- docker-compose
 
 ## Installation
 
